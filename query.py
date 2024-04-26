@@ -63,7 +63,10 @@ class SQLiteQueryApp:
             for i, row in enumerate(rows):
                 tag = "oddrow" if i % 2 == 0 else "evenrow"
                 self.results_tree.insert("", tk.END, text=row, tags=(tag,))
-        
+            
+            # Show notification for successful query execution
+            messagebox.showinfo("Success", "Query executed successfully!")
+
         except sqlite3.Error as e:
             messagebox.showerror("Error", f"An error occurred: {e}")
 
