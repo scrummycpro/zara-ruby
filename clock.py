@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 from tkcalendar import DateEntry
 import sqlite3
 import datetime
@@ -9,38 +9,46 @@ class DatabaseTransformerApp:
         self.root = root
         self.root.title("Database Transformer")
         self.root.geometry("400x500")
-        self.root.configure(background="white")
+        self.root.configure(background="black")
         self.db_file = db_file
 
+        # Create a custom style for 3D buttons
+        self.style = ttk.Style()
+        self.style.configure("Custom.TButton", relief="raised", background="#9370DB", foreground="white", padding=5)
+
         # Start Date Entry
-        self.start_date_label = tk.Label(self.root, text="Start Date:", bg="white", fg="black")
-        self.start_date_label.pack()
-        self.start_date_entry = DateEntry(self.root, background='darkblue', foreground='white', borderwidth=2)
-        self.start_date_entry.pack()
+        self.start_date_label = ttk.Label(self.root, text="Start Date:", style="Purple.TLabel")
+        self.start_date_label.pack(pady=5)
+        self.start_date_entry = DateEntry(self.root, background='blue', foreground='white')
+        self.start_date_entry.pack(pady=5, padx=10, fill='x')
 
         # End Date Entry
-        self.end_date_label = tk.Label(self.root, text="End Date:", bg="white", fg="black")
-        self.end_date_label.pack()
-        self.end_date_entry = DateEntry(self.root, background='darkblue', foreground='white', borderwidth=2)
-        self.end_date_entry.pack()
+        self.end_date_label = ttk.Label(self.root, text="End Date:", style="Purple.TLabel")
+        self.end_date_label.pack(pady=5)
+        self.end_date_entry = DateEntry(self.root, background='blue', foreground='white')
+        self.end_date_entry.pack(pady=5, padx=10, fill='x')
 
         # Start Time Button
-        self.start_time_button = tk.Button(self.root, text="Start Time", command=self.select_start_time)
-        self.start_time_button.pack()
+        self.start_time_button = ttk.Button(self.root, text="Start Time", command=self.select_start_time, style="Custom.TButton")
+        self.start_time_button.pack(pady=5, fill='x')
 
         # End Time Button
-        self.end_time_button = tk.Button(self.root, text="End Time", command=self.select_end_time)
-        self.end_time_button.pack()
+        self.end_time_button = ttk.Button(self.root, text="End Time", command=self.select_end_time, style="Custom.TButton")
+        self.end_time_button.pack(pady=5, fill='x')
 
         # Total Jobs Applied Today Entry
-        self.total_jobs_label = tk.Label(self.root, text="Total Jobs Applied Today:", bg="white", fg="black")
-        self.total_jobs_label.pack()
-        self.total_jobs_entry = tk.Entry(self.root, state="normal")
-        self.total_jobs_entry.pack()
+        self.total_jobs_label = ttk.Label(self.root, text="Total Jobs Applied Today:", style="Purple.TLabel")
+        self.total_jobs_label.pack(pady=5)
+        self.total_jobs_entry = ttk.Entry(self.root, state="normal", style="DarkBlue.TEntry")
+        self.total_jobs_entry.pack(pady=5, padx=10, fill='x')
 
         # Submit Button
-        self.submit_button = tk.Button(self.root, text="Submit", command=self.submit)
-        self.submit_button.pack()
+        self.submit_button = ttk.Button(self.root, text="Submit", command=self.submit, style="Custom.TButton")
+        self.submit_button.pack(pady=5, fill='x')
+
+        # Close Button
+        self.close_button = ttk.Button(self.root, text="Close", command=self.close_app, style="Custom.TButton")
+        self.close_button.pack(pady=5, fill='x')
 
     def select_start_time(self):
         self.start_time_entry = self.get_current_time()
@@ -95,7 +103,12 @@ class DatabaseTransformerApp:
 
         # Show notification
         notification_message = "Data successfully submitted to the database."
-        messagebox.showinfo("Notification", notification_message)
+        messagebox.showinfo("Notification", notification_message, icon="info", bg="blue")
+
+    def close_app(self):
+        confirm = messagebox.askyesno("Close Application", "Are you sure you want to close the application?")
+        if confirm:
+            self.root.destroy()
 
 if __name__ == "__main__":
     root = tk.Tk()

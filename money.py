@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 from tkcalendar import DateEntry
 import sqlite3
 
@@ -8,40 +8,48 @@ class DatabaseTransformerApp:
         self.root = root
         self.root.title("Database Transformer")
         self.root.geometry("400x600")
-        self.root.configure(background="white")
+        self.root.configure(background="black")
 
-        self.project_name_label = tk.Label(self.root, text="Project Name:", bg="white", fg="black")
-        self.project_name_label.pack()
-        self.project_name_entry = tk.Entry(self.root)
-        self.project_name_entry.pack()
+        # Create custom style
+        self.style = ttk.Style()
+        self.style.configure("Purple.TLabel", background="purple", foreground="white")
+        self.style.configure("Lavender.TButton", background="#9370DB", foreground="white", padding=5)
 
-        self.description_label = tk.Label(self.root, text="Description:", bg="white", fg="black")
-        self.description_label.pack()
-        self.description_entry = tk.Entry(self.root)
-        self.description_entry.pack()
+        self.project_name_label = ttk.Label(self.root, text="Project Name:", style="Purple.TLabel")
+        self.project_name_label.pack(pady=5)
+        self.project_name_entry = ttk.Entry(self.root, style="Lavender.TEntry")
+        self.project_name_entry.pack(pady=5)
 
-        self.deliverable_label = tk.Label(self.root, text="Deliverable:", bg="white", fg="black")
-        self.deliverable_label.pack()
-        self.deliverable_entry = tk.Entry(self.root)
-        self.deliverable_entry.pack()
+        self.description_label = ttk.Label(self.root, text="Description:", style="Purple.TLabel")
+        self.description_label.pack(pady=5)
+        self.description_entry = ttk.Entry(self.root, style="Lavender.TEntry")
+        self.description_entry.pack(pady=5)
 
-        self.money_owed_label = tk.Label(self.root, text="Money Owed (Range):", bg="white", fg="black")
-        self.money_owed_label.pack()
-        self.money_owed_entry = tk.Entry(self.root)
-        self.money_owed_entry.pack()
+        self.deliverable_label = ttk.Label(self.root, text="Deliverable:", style="Purple.TLabel")
+        self.deliverable_label.pack(pady=5)
+        self.deliverable_entry = ttk.Entry(self.root, style="Lavender.TEntry")
+        self.deliverable_entry.pack(pady=5)
 
-        self.date_started_label = tk.Label(self.root, text="Date Started:", bg="white", fg="black")
-        self.date_started_label.pack()
+        self.money_owed_label = ttk.Label(self.root, text="Money Owed (Range):", style="Purple.TLabel")
+        self.money_owed_label.pack(pady=5)
+        self.money_owed_entry = ttk.Entry(self.root, style="Lavender.TEntry")
+        self.money_owed_entry.pack(pady=5)
+
+        self.date_started_label = ttk.Label(self.root, text="Date Started:", style="Purple.TLabel")
+        self.date_started_label.pack(pady=5)
         self.date_started_entry = DateEntry(self.root, background='darkblue', foreground='white', borderwidth=2)
-        self.date_started_entry.pack()
+        self.date_started_entry.pack(pady=5)
 
-        self.date_ended_label = tk.Label(self.root, text="Date Ended:", bg="white", fg="black")
-        self.date_ended_label.pack()
+        self.date_ended_label = ttk.Label(self.root, text="Date Ended:", style="Purple.TLabel")
+        self.date_ended_label.pack(pady=5)
         self.date_ended_entry = DateEntry(self.root, background='darkblue', foreground='white', borderwidth=2)
-        self.date_ended_entry.pack()
+        self.date_ended_entry.pack(pady=5)
 
-        self.submit_button = tk.Button(self.root, text="Submit", command=self.submit)
-        self.submit_button.pack()
+        self.submit_button = ttk.Button(self.root, text="Submit", command=self.submit, style="Lavender.TButton")
+        self.submit_button.pack(pady=5, fill='x')
+
+        self.close_button = ttk.Button(self.root, text="Close", command=self.close_app, style="Lavender.TButton")
+        self.close_button.pack(pady=5, fill='x')
 
     def submit(self):
         project_name = self.project_name_entry.get()
@@ -71,6 +79,9 @@ class DatabaseTransformerApp:
         # Show notification
         notification_message = f"Data successfully submitted to {db_file}"
         messagebox.showinfo("Notification", notification_message)
+
+    def close_app(self):
+        self.root.destroy()
 
 if __name__ == "__main__":
     root = tk.Tk()
