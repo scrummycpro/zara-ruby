@@ -177,13 +177,13 @@ class ProgrammingIdeaGenerator:
         self.idea_label = tk.Label(master, text="", bg='#000000', fg='white', font=('Helvetica', 12))
         self.idea_label.pack(pady=20)
 
-        self.python_button = tk.Button(master, text="Python Idea", command=self.generate_python_idea, bg='violet', font=('Helvetica', 10))
+        self.python_button = tk.Button(master, text="Python Idea", command=self.generate_python_idea, bg='teal', font=('Helvetica', 10))
         self.python_button.pack(side=tk.LEFT, padx=20)
 
-        self.ruby_button = tk.Button(master, text="Ruby Idea", command=self.generate_ruby_idea, bg='violet', font=('Helvetica', 10))
+        self.ruby_button = tk.Button(master, text="Ruby Idea", command=self.generate_ruby_idea, bg='teal', font=('Helvetica', 10))
         self.ruby_button.pack(side=tk.RIGHT, padx=20)
 
-        self.close_button = tk.Button(master, text="Close", command=master.quit, bg='violet', font=('Helvetica', 10))
+        self.close_button = tk.Button(master, text="Close", command=master.quit, bg='teal', font=('Helvetica', 10))
         self.close_button.pack(side=tk.BOTTOM, pady=20)
 
     def generate_python_idea(self):
