@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translate and Save</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: #000000;
+        }
+        .btn-primary {
+            background-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Translation App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('recent_translations') }}">Recent Translations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('search') }}">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('guide') }}">Guide</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('notes') }}">Notes</a>
+                </li>
+            </ul>
+            <form class="form-inline ml-auto" action="{{ url_for('search') }}" method="post">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" required>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Translate and Save</h1>
+        <form action="{{ url_for('translate') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="input_text">Enter Text to Translate:</label>
+                <textarea class="form-control" id="input_text" name="input_text" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="file">Or Upload a Text File:</label>
+                <input type="file" class="form-control-file" id="file" name="file" accept=".txt">
+            </div>
+            <button type="submit" class="btn btn-primary">Translate</button>
+        </form>
+        {% if input_text %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h2>Original Text:</h2>
+                <pre>{{ input_text }}</pre>
+                <h2>Translated Text:</h2>
+                <pre>{{ translated_text }}</pre>
+                <h2>Reversed Text:</h2>
+                <pre>{{ reversed_text }}</pre>
+                <h2>Timestamp:</h2>
+                <pre>{{ timestamp }}</pre>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

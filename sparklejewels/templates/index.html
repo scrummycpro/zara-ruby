@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewelry Store</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
+            background-size: 600% 600%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .item {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            width: 200px;
+            text-align: center;
+            background-color: #fff;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #ff9a9e;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #fad0c4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Example item -->
+        <div class="item">
+            <h2>Jewelry Item 1</h2>
+            <p>$15.00</p>
+            <button onclick="buyItem('Jewelry Item 1', 25)">Buy Now</button>
+        </div>
+        <!-- Repeat for all items -->
+    </div>
+    <script>
+        function buyItem(itemName, age) {
+            alert(`Order Details:\nItem: ${itemName}\nAge: ${age}\nPrice: $15`);
+        }
+    </script>
+</body>
+</html>
