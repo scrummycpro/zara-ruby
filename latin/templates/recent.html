@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recent Translations</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap');
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ff79c6;
+        }
+
+        .btn-primary {
+            background-color: #bd93f9;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: white;
+            margin: 10px 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff79c6;
+        }
+
+        /* Cute Animation */
+        .animation {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 60%;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+
+        .animation .star {
+            width: 20px;
+            height: 20px;
+            background-color: transparent;
+            position: relative;
+            margin: 10px;
+            animation: floatUp 3s infinite ease-in-out;
+        }
+
+        .animation .star:before,
+        .animation .star:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23ff79c6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 49.94l-19.09 12.47 7.27-21.79L0 24.86l22.36-.17L32 3l9.64 21.69L64 24.86l-20.18 15.76 7.27 21.79z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(0deg);
+        }
+
+        .animation .star:nth-child(2) {
+            animation-duration: 3.5s;
+            animation-delay: 0.5s;
+        }
+
+        .animation .star:nth-child(3) {
+            animation-duration: 4s;
+            animation-delay: 1s;
+        }
+
+        .animation .star:nth-child(4) {
+            animation-duration: 3s;
+            animation-delay: 1.5s;
+        }
+
+        .animation .star:nth-child(5) {
+            animation-duration: 3.8s;
+            animation-delay: 2s;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-50px) scale(1.2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 3;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #bd93f9;
+            border-radius: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #ff79c6;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #bd93f9;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        td {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #f8f8f2;
+        }
+
+        /* Search Form */
+        .search-form {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-input {
+            padding: 10px;
+            width: 60%;
+            max-width: 400px;
+            border: none;
+            border-radius: 25px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .search-input:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background-color: #bd93f9;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #ff79c6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cute Animation -->
+    <div class="animation">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('recent') }}">Recent Translations</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Recent Translations</h1>
+
+        <!-- Search Form -->
+        <form method="GET" class="search-form">
+            <input type="text" name="search" class="search-input" placeholder="Search translations..." value="{{ request.args.get('search', '') }}">
+            <button type="submit" class="search-button">Search</button>
+        </form>
+
+        <!-- Translations Table -->
+        {% if translations %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Text</th>
+                            <th>Language</th>
+                            <th>Translated Text</th>
+                            <th>Reversed Text</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for translation in translations %}
+                            {% for lang, text in translation.translated_texts.items() %}
+                            <tr>
+                                <td>{{ translation.original_text }}</td>
+                                <td>{{ lang }}</td>
+                                <td>
+                                    {% if lang in ['Hebrew', 'Arabic'] %}
+                                        <div dir="rtl">{{ text }}</div>
+                                    {% else %}
+                                        {{ text }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if lang in ['Hebrew', 'Arabic'] %}
+                                        <div dir="rtl">{{ text[::-1] }}</div>
+                                    {% else %}
+                                        {{ text[::-1] }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>No translations found.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
