@@ -1,103 +1,130 @@
 import tkinter as tk
-from tkinter import messagebox
+import random
+import pyttsx3
 import sqlite3
 
-class PottyTrainingApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Potty Training App")
-        self.root.geometry("400x400")
-        self.root.configure(bg="black")
+# ----------------------------
+# SETUP TTS ENGINE (clear woman’s voice)
+# ----------------------------
+engine = pyttsx3.init()
+engine.setProperty('rate', 120)
+engine.setProperty('volume', 1.0)
 
-        # Dark theme colors
-        self.bg_color = "#2e2e2e"
-        self.fg_color = "#ffffff"
-        self.button_color = "#444444"
-        self.button_text_color = "#ffffff"
-        
-        self.stars = 0  # Track how many stars the child earns
-        self.create_database()
+voices = engine.getProperty('voices')
+for voice in voices:
+    if 'female' in voice.name.lower():
+        engine.setProperty('voice', voice.id)
+        break
 
-        # Title label
-        self.title_label = tk.Label(root, text="Potty Training!", font=("Arial", 24, "bold"), bg=self.bg_color, fg=self.fg_color)
-        self.title_label.pack(pady=20)
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
 
-        # Instructions
-        self.instruction_label = tk.Label(root, text="Press the button after using the potty!", font=("Arial", 14), bg=self.bg_color, fg=self.fg_color)
-        self.instruction_label.pack(pady=10)
+def speak_full_word(word):
+    # First, speak the full word
+    speak(word)
+    # Then, spell the word with hyphens in between each letter
+    spelled_out = '-'.join(list(word))
+    speak(spelled_out)
 
-        # Potty button
-        self.potty_button = tk.Button(root, text="Used the Potty!", font=("Arial", 16), bg=self.button_color, fg=self.button_text_color, command=self.on_potty_used)
-        self.potty_button.pack(pady=20)
+# ----------------------------
+# SETUP DATABASE
+# ----------------------------
+conn = sqlite3.connect("reading_scores.db")
+cursor = conn.cursor()
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS grades (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    word TEXT,
+    typed TEXT,
+    correct INTEGER
+)
+""")
+conn.commit()
 
-        # Star count label
-        self.star_label = tk.Label(root, text=f"Stars: {self.stars}", font=("Arial", 16), bg=self.bg_color, fg=self.fg_color)
-        self.star_label.pack(pady=10)
+def save_result(word, typed, correct):
+    cursor.execute("INSERT INTO grades (word, typed, correct) VALUES (?, ?, ?)", (word, typed, correct))
+    conn.commit()
 
-        # Reset button
-        self.reset_button = tk.Button(root, text="Reset Stars", font=("Arial", 14), bg=self.button_color, fg=self.button_text_color, command=self.reset_stars)
-        self.reset_button.pack(pady=10)
+def save_final_grade(correct_count, total_words):
+    grade = (correct_count / total_words) * 100
+    cursor.execute("INSERT INTO grades (word, typed, correct) VALUES (?, ?, ?)", ("Final Grade", str(grade), correct_count))
+    conn.commit()
 
-    def create_database(self):
-        """Create the SQLite database if it doesn't exist."""
-        self.conn = sqlite3.connect("potty_training.db")
-        self.cursor = self.conn.cursor()
+# ----------------------------
+# WORDS SETUP
+# ----------------------------
+word_list = ['cat', 'dog', 'sun', 'hat', 'apple', 'ball', 'fish', 'tree', 'book', 'car']
+words = random.sample(word_list, 5)
+current_index = 0
+correct_count = 0  # To keep track of correct answers
 
-        # Create the table to store star count and prize info
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS progress (
-                               id INTEGER PRIMARY KEY AUTOINCREMENT,
-                               stars INTEGER,
-                               prize TEXT)''')
-        self.conn.commit()
-
-    def save_progress(self):
-        """Save the current star count and prize to the database."""
-        prize = self.get_prize(self.stars)
-        self.cursor.execute("INSERT INTO progress (stars, prize) VALUES (?, ?)", (self.stars, prize))
-        self.conn.commit()
-
-    def get_prize(self, stars):
-        """Return a prize based on the number of stars."""
-        if stars >= 5 and stars < 10:
-            return "Snack"
-        elif stars >= 10 and stars < 15:
-            return "Toy"
-        elif stars >= 15:
-            return "Special Gift"
-        else:
-            return "No Prize Yet"
-
-    def on_potty_used(self):
-        """Increase star count when the child uses the potty."""
-        self.stars += 1
-        self.star_label.config(text=f"Stars: {self.stars}")
-        
-        # Show a congratulatory message
-        messagebox.showinfo("Good Job!", "You did it! Here's a star!")
-        
-        # Check if a prize is earned
-        prize = self.get_prize(self.stars)
-        if prize != "No Prize Yet":
-            messagebox.showinfo("Prize Earned!", f"Congrats! You earned a {prize}!")
-            self.save_progress()  # Save progress when prize is earned
-            self.stars = 0  # Reset stars after receiving prize
-            self.star_label.config(text=f"Stars: {self.stars}")
-
-    def reset_stars(self):
-        """Reset the star count."""
-        self.stars = 0
-        self.star_label.config(text=f"Stars: {self.stars}")
-        messagebox.showinfo("Reset", "Stars have been reset.")
-
-    def __del__(self):
-        """Close the database connection when the app is closed."""
-        self.conn.close()
-
-# Set up the root Tkinter window
+# ----------------------------
+# GUI SETUP
+# ----------------------------
 root = tk.Tk()
+root.title("Reading Practice")
+root.geometry("600x400")
+root.configure(bg="#121212")
 
-# Create the PottyTrainingApp
-app = PottyTrainingApp(root)
+# UI ELEMENTS
+instruction = tk.Label(root, text="Click 'Speak Word' to begin the practice.", font=("Helvetica Neue", 16), bg="#121212", fg="#ffffff")
+instruction.pack(pady=10)
 
-# Run the Tkinter event loop
+speak_btn = tk.Button(root, text="🔊 Speak Word", font=("Helvetica Neue", 16), bg="#1e1e1e", fg="#90e0ef", command=lambda: on_speak())
+speak_btn.pack(pady=5)
+
+feedback = tk.Label(root, text="", font=("Helvetica Neue", 18), bg="#121212", fg="#ffffff")
+feedback.pack(pady=5)
+
+entry = tk.Entry(root, font=("Helvetica Neue", 22), justify="center", bg="#333333", fg="#ffffff", insertbackground="white")
+entry.pack(pady=10)
+
+# ----------------------------
+# LABEL FOR SPELLING UNDER INPUT BOX
+# ----------------------------
+spelled_out = tk.Label(root, text="", font=("Courier New", 20), bg="#121212", fg="#6a4c93")
+spelled_out.pack(pady=10)
+
+# ----------------------------
+# BUTTON FOR SUBMISSION
+# ----------------------------
+def on_speak():
+    word = words[current_index]
+    spelled = ' '.join(list(word))  # Display spelling below input box
+    spelled_out.config(text=f"Spelling: {spelled.upper()}")  # Show spelling under input box
+    speak_full_word(word)  # Speak the full word and then spell it out
+
+def check_word():
+    global current_index, correct_count
+    typed = entry.get().strip().lower()
+    correct_word = words[current_index]
+
+    if typed == correct_word:
+        feedback.config(text="✅ Correct!", fg="green")
+        speak("Correct! Great job!")
+        save_result(correct_word, typed, 1)
+        correct_count += 1  # Increase correct answers count
+        current_index += 1
+        entry.delete(0, tk.END)
+
+        if current_index < len(words):
+            spelled_out.config(text="")
+        else:
+            feedback.config(text="🎉 You finished!", fg="blue")
+            spelled_out.config(text="")
+            speak("You finished all the words. Well done!")
+            save_final_grade(correct_count, len(words))  # Save the final grade
+
+    else:
+        feedback.config(text="❌ Try again!", fg="red")
+        speak("That's not correct. Try again.")
+        save_result(correct_word, typed, 0)
+
+submit_btn = tk.Button(root, text="Submit", font=("Helvetica Neue", 16), bg="#333333", fg="#90e0ef", command=check_word)
+submit_btn.pack(pady=5)
+
+# Start with welcome
+speak("Welcome! Click Speak Word to begin.")
+
 root.mainloop()
