@@ -1,0 +1,58 @@
+\documentclass[12pt,a5paper]{article}
+
+% Page layout
+\usepackage[margin=1in]{geometry}
+
+% Line numbers
+\usepackage[left]{lineno}
+\linenumbers
+
+% Font & Language
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+% Page numbers on the bottom
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot[C]{\thepage} % page number in the center of footer
+
+% Table of contents and index
+\usepackage{imakeidx}
+\makeindex
+
+% Bibliography
+\usepackage[backend=biber,style=alphabetic]{biblatex}
+\addbibresource{references.bib} % assumes you have a references.bib file
+
+% Title info
+\title{Your Document Title}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This is the introduction.\index{Introduction} 🌟
+
+\section{Main Section}
+Here's some content with an index entry.\index{Content}
+Another line. 🌸
+
+\subsection{Details}
+Even more detail here.\index{Details} 📝
+
+\newpage
+\printbibliography
+
+\newpage
+\printindex
+
+\end{document}
+
